@@ -11,8 +11,6 @@
 #include "../include/worker.h"
 
 #define INPUT_FILE_NAME "input.txt"
-#define OUTPUT_FILES_LENGTH 80000
-#define N 4
 
 void wait_for_input(char *msg) {
   char buffer[100];
@@ -20,7 +18,42 @@ void wait_for_input(char *msg) {
   fgets(buffer, 100, stdin);
 }
 
-int main() {
+int get_file_length(char *file_path) {
+  int counter = 1;
+  FILE *file = fopen(file_path, "r");
+  if (file == NULL)
+    return -1;
+  for (char c = getc(file); c != EOF; c = getc(file)) {
+    if (c == '\n') {
+      counter = counter + 1;
+    }
+  }
+  fclose(file);
+  return counter;
+}
+
+int main(int argc, char **argv) {
+  // Error handling
+  if (argc <= 1) {
+    printf("ERROR: No agument has been entered\n");
+    return -1;
+  }
+  const int N = atoi(argv[1]);
+  if (N < 1) {
+    printf("ERROR: Invalid number of workers\n");
+    return -1;
+  } else if (N > 9) {
+    printf("ERROR: Maximum number of workers (10) exceeded\n");
+    return -1;
+  }
+  const int INPUT_FILE_LENGTH = get_file_length("input/" INPUT_FILE_NAME);
+  const int OUTPUT_FILES_LENGTH = 1 + ((INPUT_FILE_LENGTH - 1) / N);
+  if (INPUT_FILE_LENGTH == -1) {
+    printf("ERROR: Input file does not exist\n");
+    return -1;
+  }
+
+  // Variable declarations
   int status;
   int shmids[N];
   char *words[] = {"CMPS", "CCE", "ECE"};
@@ -51,11 +84,6 @@ int main() {
       exit(0);
     }
   }
-
-  // Wait for the workers
-  // for (int i = 0; i < N; i++) {
-  //   waitpid(workers_pid[i], &status, 0);
-  // }
 
   // Fork Reducer processes (one for each word)
   pid_t reducers_pid[words_num];

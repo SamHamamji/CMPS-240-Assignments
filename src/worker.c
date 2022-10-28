@@ -13,6 +13,9 @@ int count_occurrences(char *file_path, char *word) {
   }
   int counter = 0;
   FILE *file = fopen(file_path, "r");
+  if (file == NULL) {
+    return 0;
+  }
 
   char buf[BUFFER_SIZE];
   char *ptr;
