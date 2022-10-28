@@ -60,6 +60,9 @@ int main(int argc, char **argv) {
   int words_num = sizeof(words) / sizeof(char *);
 
   // Splitting child
+  if (verbose)
+    wait_for_input("Press enter to split the files...\n");
+
   pid_t splitting_child_pid = fork();
   if (splitting_child_pid == 0) {
     splitter_process(INPUT_FILE_NAME, OUTPUT_FILES_LENGTH);
@@ -68,7 +71,8 @@ int main(int argc, char **argv) {
 
   // Parent
   waitpid(splitting_child_pid, &status, 0);
-  wait_for_input("Press enter to read the files...\n");
+  if (verbose)
+    wait_for_input("Press enter to read the files...\n");
 
   // Create N shared memories
   for (int i = 0; i < N; i++) {
@@ -98,10 +102,13 @@ int main(int argc, char **argv) {
   // Wait for the reducers
   for (int i = 0; i < words_num; i++) {
     waitpid(reducers_pid[i], &status, 0);
-    printf("Reducer %d exit status: %d\n", i, status);
+    if (verbose)
+      printf("\x1B[%dmReducer %d\x1B[37m exit status: %d\n", REDUCER_COLOR_ID,
+             i, status);
   }
 
-  wait_for_input("Press enter to delete the output files...\n");
+  if (verbose)
+    wait_for_input("Press enter to delete the output files...\n");
 
   // Delete the files
   if (system("rm -r output") != 0) {

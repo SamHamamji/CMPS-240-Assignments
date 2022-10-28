@@ -17,8 +17,11 @@ void reducer_process(int reducer_id, int shmids[], char *words[], int words_num,
     sharedMsg = (char *)shmat(shmids[i], NULL, 0);
     while (strncmp(sharedMsg, TERMINATION_FLAG, strlen(TERMINATION_FLAG)) != 0)
       ;
-    // printf("Message read by \x1B[33mreducer %d\x1B[37m from worker %d: %s\n",
-    //        reducer_id, i, sharedMsg);
+    if (verbose) {
+      printf("Message read by \x1B[%dmreducer %d\x1B[37m from \x1B[%dmworker "
+             "%d\x1B[37m: %s\n",
+             REDUCER_COLOR_ID, reducer_id, WORKER_COLOR_ID, i, sharedMsg);
+    }
 
     int occurrences[words_num];
     char *ptr = sharedMsg + strlen(TERMINATION_FLAG) - 1;
@@ -28,9 +31,10 @@ void reducer_process(int reducer_id, int shmids[], char *words[], int words_num,
     }
     shmdt(sharedMsg);
     word_counter += occurrences[reducer_id];
-    printf("\x1B[34mReducer %d\x1B[37m read worker %d\n", reducer_id, i);
+    // printf("\x1B[%dmReducer %d\x1B[37m read worker %d\n", REDUCER_COLOR_ID,
+    // reducer_id, i);
   }
-  printf("\x1B[34mReducer %d\x1B[37m process terminated successfully.\n",
-         reducer_id);
+  printf("\x1B[%dmReducer %d\x1B[37m process terminated successfully.\n",
+         REDUCER_COLOR_ID, reducer_id);
   printf("\t%s counter: %d\n", words[reducer_id], word_counter);
 }

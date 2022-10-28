@@ -3,6 +3,7 @@
 #include <sys/shm.h> // used for shmget(), shmat(), ...
 
 #include "../include/Constants.h"
+
 /**
  Counts the occurrences of `string` in `file`
 */
@@ -48,9 +49,12 @@ void worker_process(int worker_id, int shmid, char *words[], int words_num) {
     sprintf(sharedMsg, "%s %d", sharedMsg, occurrences[i]);
   }
 
-  // printf("Message sent from \x1B[32mworker %d\x1B[37m: %s\n", worker_id,
-  //        sharedMsg);
+  if (verbose) {
+    printf("Message sent from \x1B[%dmworker %d\x1B[37m: %s\n", WORKER_COLOR_ID,
+           worker_id, sharedMsg);
+  } else {
+    printf("\x1B[%dmWorker %d\x1B[37m process terminated successfully.\n",
+           WORKER_COLOR_ID, worker_id);
+  }
   shmdt(sharedMsg);
-  printf("\x1B[31mWorker %d\x1B[37m process terminated successfully.\n",
-         worker_id);
 }
