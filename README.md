@@ -1,10 +1,10 @@
-# Assignment 3
-Repository containing my CMPS 240 (Operating Systems) Assignment 3.  
-Due date: `October 28, 2022 at 23:59 PM`
+# General description
+Repository containing my CMPS 240 (Operating Systems) Assignments.  
 
-## General description
-The assignment consists of writing a direct inter-process communication (IPC) mechanism using shared memory, following the worker/reducer model.
-For further details, see [Assignment_3.pdf](Assignment_3.pdf)  
+# Assignment 3
+ - The assignment consists of writing a direct inter-process communication (IPC) mechanism using shared memory, following the worker/reducer model.  
+ - Due date: `Friday, October 28 2022, 11:59 PM`  
+ - For further details, see [Assignment_3.pdf](Assignment_3/Assignment_3.pdf)  
 
 ## Usage
 ### Selecting an input file
@@ -18,22 +18,24 @@ For further details, see [Assignment_3.pdf](Assignment_3.pdf)
 - In Constants.h, set verbose to 0 (false) or 1 (true)
 
 ### Compiling
-- Run one of the following commands in the root directory
+- Run the following command in the root directory
 ```sh
     make
-```
-or
-```sh
-    gcc -o a.out src/reducer.c src/splitter.c src/worker.c src/main.c
 ```
 
 ### Running
 - Run the following command in the root directory, where `N` is the number of worker processes.
 ```sh
-    a.out <N>
+    ./a.out <N>
 ```
-## Platforms
+
+# Assignment 4
+ - The assignment consists of designing a synchronization model and testing it for multiple parameter values.  
+ - Due date: `Monday, 28 November 2022, 11:59 PM`  
+ - For further details, see [Assignment_4.pdf](Assignment_4/Assignment_4.pdf)  
+
+# Platforms
 Tested on Linux (Manjaro) and MacOS.
 
-## License
+# License
 Licensed under the [MIT](LICENSE) license.
