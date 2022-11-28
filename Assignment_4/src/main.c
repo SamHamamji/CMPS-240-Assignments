@@ -12,6 +12,18 @@ int main() {
     printf("Mutex total_lock init has failed\n");
     return 1;
   }
+  if (pthread_mutex_init(&m, NULL) != 0) {
+    printf("Mutex total_lock init has failed\n");
+    return 1;
+  }
+  if (pthread_mutex_init(&wrt, NULL) != 0) {
+    printf("Mutex total_lock init has failed\n");
+    return 1;
+  }
+  if (pthread_mutex_init(&order, NULL) != 0) {
+    printf("Mutex total_lock init has failed\n");
+    return 1;
+  }
 
   // initialize threads
   const int writer_sub_array_length = 1 + (int)((-1.0 + length) / (nw));
@@ -56,5 +68,6 @@ int main() {
     pthread_join(readers[i], NULL);
   }
 
+  printf("\ntotal_executions: %d\n", total_executions);
   return 0;
 }
