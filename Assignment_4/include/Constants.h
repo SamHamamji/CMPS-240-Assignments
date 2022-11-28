@@ -24,6 +24,7 @@ extern sem_t reading;
 extern int read_counter;
 
 extern pthread_mutex_t total_lock;
-extern int total_executions;
+extern int total_reading_executions;
+extern int total_writing_executions;
 
 extern int array[length];

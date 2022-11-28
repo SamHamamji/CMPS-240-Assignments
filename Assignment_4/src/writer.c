@@ -19,7 +19,7 @@ void write(Range range) {
   pthread_mutex_unlock(&order);
 
   pthread_mutex_lock(&total_lock);
-  if (total_executions >= n) {
+  if (total_reading_executions + total_writing_executions >= n) {
     pthread_mutex_unlock(&wrt);
     pthread_mutex_unlock(&total_lock);
     pthread_exit(NULL);
@@ -27,7 +27,7 @@ void write(Range range) {
   pthread_mutex_unlock(&total_lock);
 
   pthread_mutex_lock(&total_lock);
-  total_executions++;
+  total_writing_executions++;
   pthread_mutex_unlock(&total_lock);
 
   // Critical section

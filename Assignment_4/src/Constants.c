@@ -7,6 +7,7 @@ sem_t reading;
 int read_counter = 0;
 
 pthread_mutex_t total_lock;
-int total_executions = 0;
+int total_reading_executions = 0;
+int total_writing_executions = 0;
 
 int array[length];

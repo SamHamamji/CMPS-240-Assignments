@@ -72,7 +72,11 @@ int main() {
   for (int i = 0; i < nr; i++) {
     pthread_join(readers[i], NULL);
   }
-
-  printf("total_executions: %d\n\n", total_executions);
+  printf("Thread executions:\n");
+  printf("\x1B[%dmReading\x1B[37m: %d\n", READER_COLOR_ID,
+         total_reading_executions);
+  printf("\x1B[%dmWriting\x1B[37m: %d\n", WRITER_COLOR_ID,
+         total_writing_executions);
+  printf("Total: %d\n\n", total_reading_executions + total_writing_executions);
   return 0;
 }
