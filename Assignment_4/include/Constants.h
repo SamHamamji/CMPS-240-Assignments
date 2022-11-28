@@ -5,12 +5,12 @@
 #define length 10000000   // array length
 #define nr 5              // number of readers
 #define nw 5              // number of writers
-#define n 100             // total number of executions
+#define n 1000            // total number of executions
 #define MAX_READERS_NUM 3 // max number of readers that can run simultaneously
 
 #define WRITER_COLOR_ID 31
 #define READER_COLOR_ID 34
-#define verbose true
+#define verbose false
 
 typedef struct range {
   int first;
