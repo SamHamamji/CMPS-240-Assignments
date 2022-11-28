@@ -32,14 +32,12 @@ void write(Range range) {
 
   // Critical section
   writer_critical_section(range);
-  printf("\x1B[%dmWriter\x1B[37m [%d-%d]\n", WRITER_COLOR_ID, range.first,
-         range.last);
+  if (verbose)
+    printf("\x1B[%dmWriter\x1B[37m [%d-%d]\n", WRITER_COLOR_ID, range.first,
+           range.last);
 
   // Exit section
   pthread_mutex_unlock(&wrt);
-
-  // Remainder section
-  // printf("Writer [%d-%d]\n", range.first, range.last);
 }
 
 void *writer(void *args) {

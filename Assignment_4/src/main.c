@@ -1,4 +1,5 @@
 #include <pthread.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -9,19 +10,23 @@
 int main() {
   srand((unsigned int)time(NULL));
   if (pthread_mutex_init(&total_lock, NULL) != 0) {
-    printf("Mutex total_lock init has failed\n");
+    printf("Mutex `total_lock` init has failed\n");
     return 1;
   }
   if (pthread_mutex_init(&m, NULL) != 0) {
-    printf("Mutex total_lock init has failed\n");
+    printf("Mutex `m` init has failed\n");
     return 1;
   }
   if (pthread_mutex_init(&wrt, NULL) != 0) {
-    printf("Mutex total_lock init has failed\n");
+    printf("Mutex `wrt` init has failed\n");
     return 1;
   }
   if (pthread_mutex_init(&order, NULL) != 0) {
-    printf("Mutex total_lock init has failed\n");
+    printf("Mutex `order` init has failed\n");
+    return 1;
+  }
+  if (sem_init(&reading, false, MAX_READERS_NUM) != 0) {
+    printf("Semaphore `reading` init has failed\n");
     return 1;
   }
 
@@ -68,6 +73,6 @@ int main() {
     pthread_join(readers[i], NULL);
   }
 
-  printf("\ntotal_executions: %d\n", total_executions);
+  printf("total_executions: %d\n\n", total_executions);
   return 0;
 }

@@ -14,12 +14,11 @@ double reader_critical_section(Range range) {
   return (double)value / (range.last - range.first);
 }
 
-void reader_exit_section() {}
-
 void read(Range range) {
   double mean;
   // Entry section
   pthread_mutex_lock(&order);
+  sem_wait(&reading);
   pthread_mutex_lock(&m);
   read_counter++;
   if (read_counter == 1) // if first reader
@@ -29,30 +28,34 @@ void read(Range range) {
 
   pthread_mutex_lock(&total_lock);
   if (total_executions >= n) {
+    sem_post(&reading);
     pthread_mutex_unlock(&wrt);
     pthread_mutex_unlock(&total_lock);
     pthread_exit(NULL);
   }
-  pthread_mutex_unlock(&total_lock);
-
-  pthread_mutex_lock(&total_lock);
   total_executions++;
   pthread_mutex_unlock(&total_lock);
 
   // Critical section
+  int num;
+  num = sem_getvalue(&reading, &num);
+  if (num > MAX_READERS_NUM) {
+    printf("ERROR: MAX READERS NUM HAS BEEN EXCEEDED");
+    exit(EXIT_FAILURE);
+  }
+
   mean = reader_critical_section(range);
-  printf("\x1B[%dmReader\x1B[37m [%d-%d] mean %f\n", READER_COLOR_ID,
-         range.first, range.last, mean);
+  if (verbose)
+    printf("\x1B[%dmReader\x1B[37m [%d-%d] mean %f\n", READER_COLOR_ID,
+           range.first, range.last, mean);
 
   // Exit section
+  sem_post(&reading);
   pthread_mutex_lock(&m);
   read_counter--;
   if (read_counter == 0) // if last reader
     pthread_mutex_unlock(&wrt);
   pthread_mutex_unlock(&m);
-
-  // Remainder section
-  // printf("Reader [%d-%d] mean %f\n", range.first, range.last, mean);
 }
 
 void *reader(void *args) {
